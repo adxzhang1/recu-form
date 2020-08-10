@@ -1,44 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Recu-Form
 
-## Available Scripts
+Infinitely nested forms built from javascript objects. Uses material-ui, yup for validation, and react-sortable-hoc + react-virtualized for list forms.
 
-In the project directory, you can run:
+MapForm component allows you to create a form in the format of a map.
 
-### `npm start`
+ArrayForm component allows you to create a form in the format of an array.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Setup
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Basic config is an object in the format:
+```
+var config = {
+  type: 'map' | 'array' | 'string' | 'bool' | 'number' | 'date' | 'select' | 'url';
+  nested?: {...}; // an object to represent the map or an item in the array, only for 'map' and 'array'
+  choics?: [] // choices to select, only for 'select';
+  validate?: {
+    required?: boolean;
+  }
+  options?: {
+    message?:
+    multiline?: boolean; // only if 'string'
+    rows?: number; // specify height of input, only if multiline
+    rowsMax?: number; // specify max height of input, only if multiline
+    markdown?: boolean; // only if 'string'
+    viewMarkdown?: boolean; // adds a toggleable dialog to view markdown, only if markdown
+  }
+}
+```
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Example
 
-### `npm run build`
+```
+import React from 'react';
+import { MapFormStandardLayout as MapForm } from './map-form.component';
+import { ArrayFormStandardLayout as ArrayForm } from './array-form.component';
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+const Form = () => {
+  return <div>
+    <MapForm
+      title="Edit"
+      config={config}
+      data={initialValues}
+      label="Edit"
+      onNestedChange={(data) => console.log(data)}
+      root
+    />
+    <ArrayForm
+      title="Edit Array"
+      config={arrayConfig}
+      data={arrayInitialValues}
+      onNestedChange={(data) => console.log(data)}
+      onItemChange={(...args) => console.log(args)}
+      root
+    />
+  </div>
+}
+```
